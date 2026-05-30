@@ -42,7 +42,7 @@ Each encryption operation generates a unique random salt and nonce, ensuring tha
 ### Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/folderlock.git
+git clone https://github.com/areebxy/folderlock.git
 cd folderlock
 ```
 
