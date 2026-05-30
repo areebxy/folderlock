@@ -1,89 +1,168 @@
-# 🔒 FolderLock — AES-256-GCM Folder Encryption Utility
+# 🔒 FolderLock
 
-FolderLock is a secure desktop application built with Python that encrypts entire folders into a single encrypted container using **AES-256-GCM** encryption and **PBKDF2-SHA256** key derivation.
+**AES-256-GCM Folder Encryption Utility**
 
-Designed with a modern GUI and strong cryptographic practices, FolderLock provides a simple way to protect sensitive files and folders with a password.
+FolderLock is a secure desktop application built with Python that encrypts entire folders into a single encrypted container (`.flck`) using modern cryptographic standards.
+
+The application features a clean graphical interface, password strength analysis, integrity verification, and optional secure deletion of original files after successful encryption.
 
 ---
 
 ## ✨ Features
 
 * 🔐 AES-256-GCM authenticated encryption
-* 🔑 PBKDF2-SHA256 key derivation (600,000 iterations)
-* 📁 Encrypt entire folders into a single `.flck` container
+* 🔑 PBKDF2-HMAC-SHA256 key derivation (600,000 iterations)
+* 📁 Encrypt entire folders into a single `.flck` file
 * 📂 Restore encrypted folders with original directory structure
-* ✅ Automatic integrity verification after encryption
-* 🗑 Optional secure deletion of original files
+* ✅ Automatic integrity verification before deleting originals
 * 📊 Password strength meter
-* 🎨 Modern dark-themed GUI built with Tkinter
-* 🚀 No external server or cloud dependency
+* 🎨 Modern dark-themed GUI
+* 🗑 Optional shredding of original files after encryption
+* 💻 Cross-platform support (Windows & Linux)
 
 ---
 
 ## 🛡 Security
 
-FolderLock uses modern cryptographic standards:
+FolderLock uses industry-standard cryptographic primitives:
 
-| Component         | Implementation                  |
-| ----------------- | ------------------------------- |
-| Encryption        | AES-256-GCM                     |
-| Key Derivation    | PBKDF2-HMAC-SHA256              |
-| Salt Length       | 32 Bytes                        |
-| Nonce Length      | 12 Bytes                        |
-| PBKDF2 Iterations | 600,000                         |
-| Authentication    | Built-in GCM Authentication Tag |
+| Component               | Implementation         |
+| ----------------------- | ---------------------- |
+| Encryption Algorithm    | AES-256-GCM            |
+| Key Derivation Function | PBKDF2-HMAC-SHA256     |
+| PBKDF2 Iterations       | 600,000                |
+| Salt Length             | 32 Bytes               |
+| Nonce Length            | 12 Bytes               |
+| Authentication          | GCM Authentication Tag |
 
-Each encryption operation generates a unique random salt and nonce, ensuring that identical passwords never produce identical encrypted outputs.
+### Encryption Process
+
+1. Folder contents are compressed into an in-memory ZIP archive.
+2. A random salt and nonce are generated.
+3. A 256-bit key is derived from the user's password.
+4. ZIP data is encrypted using AES-256-GCM.
+5. The encrypted data is stored inside a `.flck` container.
+6. Integrity is verified before any optional deletion of original files.
 
 ---
 
 ## 📦 Installation
 
-### Clone Repository
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/areebxy/folderlock.git
-cd folderlock
+git clone https://github.com/areebxy/Folder-Lock.git
+cd Folder-Lock
+```
+
+---
+
+## 🪟 Windows Installation
+
+### Install Python
+
+Download and install Python from:
+
+https://www.python.org/downloads/
+
+During installation, make sure to enable:
+
+```text
+☑ Add Python to PATH
 ```
 
 ### Install Dependencies
+
+Open Command Prompt or PowerShell:
 
 ```bash
 pip install cryptography
 ```
 
----
-
-## ▶ Usage
-
-Run the application:
+### Run the Application
 
 ```bash
-python folder_locker.py
+python main.py
 ```
+
+---
+
+## 🐧 Linux Installation
+
+### Ubuntu / Debian / Kali Linux
+
+Install Tkinter and required packages:
+
+```bash
+sudo apt update
+sudo apt install python3 python3-pip python3-tk -y
+pip3 install cryptography
+```
+
+Run:
+
+```bash
+python3 main.py
+```
+
+---
+
+### Fedora
+
+```bash
+sudo dnf install python3 python3-pip python3-tkinter
+pip3 install cryptography
+```
+
+Run:
+
+```bash
+python3 main.py
+```
+
+---
+
+### Arch Linux
+
+```bash
+sudo pacman -S python python-pip tk
+pip install cryptography
+```
+
+Run:
+
+```bash
+python main.py
+```
+
+---
+
+## 🚀 Usage
 
 ### Encrypt a Folder
 
-1. Select **Lock Folder**
-2. Browse and choose a folder
-3. Enter a password
-4. Confirm password
-5. Click **Lock Folder**
-6. A `.flck` encrypted container will be created
+1. Launch FolderLock.
+2. Select **Lock Folder**.
+3. Browse and choose a folder.
+4. Enter a strong password.
+5. Confirm the password.
+6. Click **Lock Folder**.
+7. A `.flck` encrypted container will be generated.
 
 ### Decrypt a Folder
 
-1. Select **Unlock File**
-2. Choose a `.flck` file
-3. Enter the correct password
-4. Click **Unlock File**
-5. Files will be restored automatically
+1. Launch FolderLock.
+2. Select **Unlock File**.
+3. Browse and select a `.flck` file.
+4. Enter the correct password.
+5. Click **Unlock File**.
+6. The folder contents will be restored.
 
 ---
 
-## 📁 Container Format
+## 📁 File Format
 
-FolderLock stores encrypted data in a custom `.flck` format:
+FolderLock stores encrypted data using the following format:
 
 ```text
 MAGIC       4 bytes
@@ -91,43 +170,48 @@ VERSION     1 byte
 SALT       32 bytes
 NONCE      12 bytes
 DATA_LEN    8 bytes
-DATA      variable
+DATA      variable length
 ```
 
 ---
 
 ## ⚠ Important Notes
 
-* If you forget your password, your data cannot be recovered.
-* AES-GCM provides both encryption and integrity protection.
-* Secure deletion effectiveness may vary depending on the operating system and storage device.
-* Always keep backups of important data.
+* Password recovery is impossible if the password is lost.
+* AES-GCM provides both confidentiality and integrity protection.
+* Always keep backups of important files.
+* Secure deletion behavior depends on the operating system and storage device.
 
 ---
 
-## 🖼 Screenshot
-
-Add screenshots of the application here:
+## 📂 Project Structure
 
 ```text
-assets/screenshot.png
+Folder-Lock/
+│
+├── main.py
+├── README.md
+└── screenshots/
 ```
 
 ---
 
-## 🛠 Built With
+## 📸 Screenshots
 
-* Python 3
-* Tkinter
-* Cryptography Library
-* AES-256-GCM
-* PBKDF2-HMAC-SHA256
+<img width="692" height="820" alt="image" src="https://github.com/user-attachments/assets/fe292640-9f78-4c1e-869e-944e1f557d0a" />
 
 ---
 
-## 📄 License
+## 🛠 Requirements
 
-This project is licensed under the MIT License.
+* Python 3.10+
+* cryptography
+
+Install manually:
+
+```bash
+pip install cryptography
+```
 
 ---
 
@@ -135,8 +219,21 @@ This project is licensed under the MIT License.
 
 **Mohammad Areeb**
 
-FolderLock was created to provide a simple, secure, and user-friendly way to protect sensitive folders using modern encryption standards.
+GitHub: https://github.com/areebxy
 
 ---
 
-### ⭐ If you find this project useful, consider giving it a star on GitHub!
+## ⭐ Support
+
+If you find this project useful:
+
+* ⭐ Star the repository
+* 🍴 Fork the project
+* 🛠 Contribute improvements
+* 🐞 Report bugs through GitHub Issues
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License.
